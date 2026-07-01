@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TicketController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ConcertController;
 use App\Http\Controllers\CheckIn\CheckInController;
 use App\Http\Controllers\ProfileController;
 
@@ -87,6 +88,16 @@ Route::middleware(['auth', 'admin', 'activity'])->prefix('admin')->name('admin.'
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    // Concerts Management
+    Route::get('/concerts', [ConcertController::class, 'index'])->name('concerts.index');
+    Route::get('/concerts/create', [ConcertController::class, 'create'])->name('concerts.create');
+    Route::post('/concerts', [ConcertController::class, 'store'])->name('concerts.store');
+    Route::get('/concerts/{concert}', [ConcertController::class, 'show'])->name('concerts.show');
+    Route::get('/concerts/{concert}/edit', [ConcertController::class, 'edit'])->name('concerts.edit');
+    Route::put('/concerts/{concert}', [ConcertController::class, 'update'])->name('concerts.update');
+    Route::delete('/concerts/{concert}', [ConcertController::class, 'destroy'])->name('concerts.destroy');
+    Route::post('/concerts/{concert}/status', [ConcertController::class, 'updateStatus'])->name('concerts.update-status');
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
