@@ -40,9 +40,11 @@ class CheckInController extends Controller
             'ticket_code.required' => 'Kode tiket wajib diisi.',
         ]);
 
+        $userId = $request->user()?->id;
+        
         $result = $this->checkInService->checkIn(
             $validated['ticket_code'],
-            auth()->id()
+            $userId
         );
 
         // Handle AJAX request

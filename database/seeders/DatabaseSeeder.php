@@ -14,6 +14,14 @@ class DatabaseSeeder extends Seeder
     {
         $this->command->info('🌱 Starting database seeding...');
 
+        $this->command->info('🧹 Clearing existing data...');
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+        ActivityLog::truncate();
+        Ticket::truncate();
+        \App\Models\Concert::truncate();
+        User::truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+
         // Create Admin User
         $this->command->info('👤 Creating admin user...');
         $admin = User::create([
@@ -47,6 +55,83 @@ class DatabaseSeeder extends Seeder
             'phone' => '081234567892',
             'email_verified_at' => now(),
         ]);
+
+        // ============================================
+        // FIX: Create concerts
+        // ============================================
+        $this->command->info('🎵 Creating concerts...');
+
+        $concerts = [
+            [
+                'name' => 'AGX Music Festival 2026',
+                'slug' => 'agx-music-festival-2026',
+                'description' => 'Festival musik terbesar tahun 2026! Hadiri penampilan artis-artis top Indonesia dan internasional dalam satu panggung megah. Pengalaman musik yang tak terlupakan bersama ribuan pecinta musik.',
+                'venue' => 'Gelora Bung Karno Main Stadium',
+                'location' => 'Jl. Pintu Satu Senayan, Jakarta Pusat',
+                'start_date' => now()->addDays(30),
+                'end_date' => now()->addDays(30)->addHours(6),
+                'ticket_sales_start' => now(),
+                'ticket_sales_end' => now()->addDays(29),
+                'capacity' => 50000,
+                'tickets_sold' => 0,
+                'ticket_price' => 750000,
+                'status' => 'published',
+                'lineup' => [
+                    'Tulus',
+                    'Raisa',
+                    'Pamungkas',
+                    'Hindia',
+                    'Fourtwnty',
+                ],
+            ],
+            [
+                'name' => 'Summer Night Concert',
+                'slug' => 'summer-night-concert-2026',
+                'description' => 'Nikmati malam musim panas yang hangat dengan alunan musik akustik yang menenangkan. Konser intim dengan kapasitas terbatas untuk pengalaman yang lebih personal.',
+                'venue' => 'Beach City International Stadium',
+                'location' => 'PIK Avenue, Jakarta Utara',
+                'start_date' => now()->addDays(45),
+                'end_date' => now()->addDays(45)->addHours(4),
+                'ticket_sales_start' => now(),
+                'ticket_sales_end' => now()->addDays(44),
+                'capacity' => 10000,
+                'tickets_sold' => 0,
+                'ticket_price' => 500000,
+                'status' => 'published',
+                'lineup' => [
+                    'Isyana Sarasvati',
+                    'Afgan',
+                    'Rizky Febian',
+                ],
+            ],
+            [
+                'name' => 'Rock Revolution 2026',
+                'slug' => 'rock-revolution-2026',
+                'description' => 'Festival rock terbesar! Energi tinggi, stage diving, dan musik rock yang menggelegar. Siapkan energi Anda untuk konser paling brutal tahun ini!',
+                'venue' => 'Jakarta International Expo',
+                'location' => 'JIExpo Kemayoran, Jakarta Pusat',
+                'start_date' => now()->addDays(60),
+                'end_date' => now()->addDays(61),
+                'ticket_sales_start' => now(),
+                'ticket_sales_end' => now()->addDays(59),
+                'capacity' => 30000,
+                'tickets_sold' => 0,
+                'ticket_price' => 600000,
+                'status' => 'published',
+                'lineup' => [
+                    'Slank',
+                    'Dewa 19',
+                    'Sheila on 7',
+                    'Peterpan',
+                ],
+            ],
+        ];
+
+        foreach ($concerts as $concertData) {
+            \App\Models\Concert::create($concertData);
+        }
+
+        $this->command->info('✅ Concerts created: ' . \App\Models\Concert::count());
 
         // ============================================
         // FIX: Generate tickets dengan status UNUSED semua

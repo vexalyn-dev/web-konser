@@ -18,7 +18,8 @@ use App\Http\Controllers\ProfileController;
 */
 
 Route::get('/', [PublicController::class, 'index'])->name('home');
-Route::get('/order', [PublicController::class, 'order'])->name('order');
+Route::get('/concert/{slug}', [PublicController::class, 'showConcert'])->name('concert.show');
+Route::get('/order/{concertSlug?}', [PublicController::class, 'order'])->name('order');
 Route::post('/order', [PublicController::class, 'store'])->name('order.store');
 Route::get('/ticket/{ticket_code}', [PublicController::class, 'show'])->name('ticket.show');
 Route::get('/ticket/{ticket_code}/download', [PublicController::class, 'downloadPdf'])->name('ticket.download');

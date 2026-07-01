@@ -73,6 +73,19 @@
                     <!-- QR Code -->
                     <div class="flex justify-center mb-6">
                         <div class="p-4 bg-white rounded-xl border-2 border-dashed border-slate-300">
+                            @php
+                                use SimpleSoftwareIO\QrCode\Facades\QrCode;
+                                
+                                // Generate QR Code yang HANYA berisi ticket_code
+                                $qrCodeBase64 = 'data:image/png;base64,' . base64_encode(
+                                    QrCode::format('png')
+                                          ->size(300)
+                                          ->margin(1)
+                                          ->generate($ticket->ticket_code) // FIX: Hanya kode tiket, tanpa URL atau data lain
+                                );
+                            @endphp
+
+                            <!-- Di dalam img tag -->
                             <img src="{{ $qrCodeBase64 }}" alt="QR Code" class="w-48 h-48">
                         </div>
                     </div>

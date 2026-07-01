@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 
 class Ticket extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'concert_id',
         'ticket_code',
         'full_name',
         'email',
@@ -71,6 +73,15 @@ class Ticket extends Model
         return !$this->isUsed();
     }
 
+    // ============================================
+    // Relationships
+    // ============================================
+
+    public function concert()
+    {
+        return $this->belongsTo(Concert::class);
+    }
+
     /**
      * FIX: Auto-fix data inkonsisten saat dipanggil
      * Jika status = checked_in tapi checked_in_at null, atau sebaliknya
@@ -94,7 +105,7 @@ class Ticket extends Model
 
         if ($needsFix) {
             $this->update($data);
-            \Log::warning("Ticket data inconsistency auto-fixed: {$this->ticket_code}", $data);
+            Log::warning("Ticket data inconsistency auto-fixed: {$this->ticket_code}", $data);
         }
     }
 
@@ -115,22 +126,22 @@ class Ticket extends Model
     }
 
     // Scopes
-    public function scopeUnused($query)
+    public function scopeUnused(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
         return $query->where('status', 'unused');
     }
 
-    public function scopeCheckedIn($query)
+    public function scopeCheckedIn(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
         return $query->where('status', 'checked_in');
     }
 
-    public function scopeToday($query)
+    public function scopeToday(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
         return $query->whereDate('checked_in_at', today());
     }
 
-    public function scopeByCity($query, $city)
+    public function scopeByCity(\Illuminate\Database\Eloquent\Builder $query, ?string $city): \Illuminate\Database\Eloquent\Builder
     {
         if ($city) {
             return $query->where('city', $city);
@@ -138,7 +149,7 @@ class Ticket extends Model
         return $query;
     }
 
-    public function scopeByStatus($query, $status)
+    public function scopeByStatus(\Illuminate\Database\Eloquent\Builder $query, ?string $status): \Illuminate\Database\Eloquent\Builder
     {
         if ($status) {
             return $query->where('status', $status);
@@ -146,7 +157,7 @@ class Ticket extends Model
         return $query;
     }
 
-    public function scopeSearch($query, $search)
+    public function scopeSearch(\Illuminate\Database\Eloquent\Builder $query, ?string $search): \Illuminate\Database\Eloquent\Builder
     {
         if ($search) {
             return $query->where(function ($q) use ($search) {
@@ -161,7 +172,7 @@ class Ticket extends Model
         return $query;
     }
 
-    public function scopeDateRange($query, $from, $to)
+    public function scopeDateRange(\Illuminate\Database\Eloquent\Builder $query, ?string $from, ?string $to): \Illuminate\Database\Eloquent\Builder
     {
         if ($from) {
             $query->whereDate('created_at', '>=', $from);
