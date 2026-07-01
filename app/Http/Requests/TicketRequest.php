@@ -22,6 +22,7 @@ class TicketRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'concert_id' => ['required', 'exists:concerts,id'],
             'full_name' => ['required', 'string', 'min:3', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['required', 'string', 'min:10', 'max:20', 'regex:/^[0-9+\-\s()]+$/'],
@@ -41,6 +42,9 @@ class TicketRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'concert_id.required' => 'Pilih konser terlebih dahulu.',
+            'concert_id.exists' => 'Konser yang dipilih tidak valid.',
+
             'full_name.required' => 'Nama lengkap wajib diisi.',
             'full_name.min' => 'Nama lengkap minimal 3 karakter.',
             'full_name.max' => 'Nama lengkap maksimal 255 karakter.',

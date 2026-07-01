@@ -47,6 +47,24 @@
             <!-- Main Info -->
             <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden"
                 data-aos="fade-up" data-aos-delay="100">
+                @if($ticket->concert)
+                <div class="p-4 rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-100 dark:border-blue-800 m-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-xs text-blue-600 dark:text-blue-400 font-semibold uppercase tracking-wider">Konser</p>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ $ticket->concert->name }}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                                 {{ $ticket->concert->start_date->format('d M Y') }} • 📍 {{ $ticket->concert->venue }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                @endif
                 <!-- Status Header -->
                 <div class="gradient-primary p-6 text-white">
                     <div class="flex items-center justify-between">
