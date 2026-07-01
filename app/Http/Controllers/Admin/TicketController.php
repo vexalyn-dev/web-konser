@@ -75,7 +75,8 @@ class TicketController extends Controller
      */
     public function create(): View
     {
-        return view('admin.tickets.create');
+        $concerts = \App\Models\Concert::orderBy('name')->get();
+        return view('admin.tickets.create', compact('concerts'));
     }
 
     /**
@@ -110,7 +111,8 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket): View
     {
-        return view('admin.tickets.edit', compact('ticket'));
+        $concerts = \App\Models\Concert::orderBy('name')->get();
+        return view('admin.tickets.edit', compact('ticket', 'concerts'));
     }
 
     /**
